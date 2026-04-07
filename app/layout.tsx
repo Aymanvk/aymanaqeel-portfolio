@@ -1,0 +1,38 @@
+import type { Metadata } from 'next';
+import { Space_Grotesk, Inter, Space_Mono, Cormorant_Garamond } from 'next/font/google';
+import './globals.css';
+import Navbar from '@/components/ui/Navbar';
+import CursorGlow from '@/components/ui/CursorGlow';
+import LenisProvider from '@/components/ui/LenisProvider';
+import ScrollProgress from '@/components/ui/ScrollProgress';
+import AOSInit from '@/components/ui/AOSInit';
+
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
+const spaceMono = Space_Mono({ weight: ["400", "700"], subsets: ['latin'], variable: '--font-mono' });
+const cormorant = Cormorant_Garamond({ weight: ["300", "400", "500", "600"], subsets: ['latin'], style: ['normal', 'italic'], variable: '--font-serif' });
+
+export const metadata: Metadata = {
+  title: 'Ayman Aqeel — Full-Stack Developer',
+  description: 'Software is going nowhere, ever.',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${cormorant.variable}`}>
+      <body>
+        <LenisProvider>
+          <AOSInit />
+          <CursorGlow />
+          <ScrollProgress />
+          <Navbar />
+          {children}
+        </LenisProvider>
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,58 @@
+{
+  "name": "aymanaqeel-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.x",
+    "react": "18.3.x",
+    "react-dom": "18.3.x",
+    "typescript": "5.x",
+
+    "@supabase/supabase-js": "^2.x",
+    "@supabase/ssr": "^0.x",
+
+    "resend": "^3.x",
+
+    "gsap": "^3.x",
+    "@gsap/react": "^2.x",
+
+    "lenis": "^1.x",
+
+    "framer-motion": "^11.x",
+
+    "three": "^0.167.x",
+    "@react-three/fiber": "^8.x",
+    "@react-three/drei": "^9.x",
+
+    "aos": "*",
+
+    "bad-words": "^3.x",
+
+    "@uiw/react-md-editor": "^4.x",
+    "react-markdown": "^9.x",
+    "rehype-highlight": "^7.x",
+    "remark-gfm": "^4.x",
+
+    "clsx": "^2.x",
+    "tailwind-merge": "^2.x"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/react": "^18.x",
+    "@types/react-dom": "^18.x",
+    "@types/three": "^0.167.x",
+    "@types/aos": "*",
+    "@types/bad-words": "^3.x",
+    "tailwindcss": "^3.x",
+    "autoprefixer": "^10.x",
+    "postcss": "^8.x",
+    "eslint": "^8.x",
+    "eslint-config-next": "14.x"
+  }
+}
