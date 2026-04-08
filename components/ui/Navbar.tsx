@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
@@ -13,22 +14,36 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [heroVisible, setHeroVisible] = useState(true);
 
-  // Hide navbar when hero section is in view
+  // Hide navbar when hero section is in view, re-evaluate on route change
   useEffect(() => {
-    const hero = document.getElementById('hero');
-    if (!hero) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setHeroVisible(entry.isIntersecting),
-      { threshold: 0.15 }
-    );
-    obs.observe(hero);
-    return () => obs.disconnect();
-  }, []);
+    let obs: IntersectionObserver | null = null;
+    
+    const setupObserver = () => {
+      const hero = document.getElementById('hero');
+      if (hero) {
+        obs = new IntersectionObserver(
+          ([entry]) => setHeroVisible(entry.isIntersecting),
+          { threshold: 0.15 }
+        );
+        obs.observe(hero);
+      } else {
+        setHeroVisible(false);
+      }
+    };
+
+    const timer = setTimeout(setupObserver, 100);
+
+    return () => {
+      clearTimeout(timer);
+      if (obs) obs.disconnect();
+    };
+  }, [pathname]);
 
   // Monitor scroll for dynamic expansion
   useEffect(() => {

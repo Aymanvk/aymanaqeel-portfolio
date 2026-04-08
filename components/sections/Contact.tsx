@@ -17,13 +17,28 @@ export default function Contact() {
   const [direction, setDirection] = useState(1);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
 
-  // Autofocus on step change
+  // Detect when contact section comes into view
   useEffect(() => {
-    if (status === 'idle') {
-      inputRef.current?.focus();
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.5 }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Autofocus on step change OR when in view, without forcing scroll jump
+  useEffect(() => {
+    if (status === 'idle' && isInView) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus({ preventScroll: true });
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [step, status]);
+  }, [step, status, isInView]);
 
   const handleNext = () => {
     const currentKey = steps[step - 1].id as keyof typeof formData;
@@ -106,7 +121,7 @@ export default function Contact() {
       <div className="mesh-overlay opacity-30 pointer-events-none z-[1]" />
 
       {/* Split Layout Container */}
-      <div className="flex w-full h-full relative z-10 flex-col md:flex-row">
+      <div ref={containerRef} className="flex w-full h-full relative z-10 flex-col md:flex-row">
         
         <AnimatePresence mode="wait">
           {status === 'success' ? (
@@ -204,7 +219,6 @@ export default function Contact() {
                             placeholder={steps[step - 1].placeholder}
                             className="w-full bg-transparent border-b border-[#2E4434] group-hover:border-[#8A9B8E] focus:border-[#C8956C] outline-none py-4 text-xl md:text-2xl text-cream font-body transition-colors resize-none placeholder:text-[#8A9B8E]/20"
                             rows={1}
-                            autoFocus
                           />
                         ) : (
                           <input
@@ -215,7 +229,6 @@ export default function Contact() {
                             onKeyDown={handleKeyDown}
                             placeholder={steps[step - 1].placeholder}
                             className="w-full bg-transparent border-b border-[#2E4434] group-hover:border-[#8A9B8E] focus:border-[#C8956C] outline-none py-4 text-xl md:text-2xl text-cream font-body transition-colors placeholder:text-[#8A9B8E]/20"
-                            autoFocus
                           />
                         )}
                         

@@ -105,7 +105,7 @@ export default function Hero() {
       />
 
       {/* ── Top bar ── */}
-      <div className="relative z-10 flex items-start justify-between px-8 md:px-12 pt-8 md:pt-10">
+      <div className="relative z-10 flex items-center justify-between px-8 md:px-12 pt-8 md:pt-10">
 
         {/* Logo + Name block */}
         <div ref={topRef} className="flex items-center gap-3.5" style={{ opacity: 0, transform: 'translateY(-18px)' }}>
@@ -127,16 +127,16 @@ export default function Hero() {
         </div>
 
         {/* Live clock */}
-        <div ref={clockRef} className="text-right" style={{ opacity: 0, transform: 'translateY(-18px)' }}>
+        <div ref={clockRef} className="text-right flex flex-col gap-1.5" style={{ opacity: 0, transform: 'translateY(-18px)' }}>
           <div
             className="text-[#F5F0E6]/35 uppercase tracking-widest leading-none"
-            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.62rem' }}
+            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.7rem' }}
           >
             Malappuram, Kerala
           </div>
           <div
-            className="text-[#C8956C] mt-1.5 tabular-nums leading-none"
-            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.78rem' }}
+            className="text-[#C8956C] tabular-nums leading-none"
+            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.9rem' }}
           >
             <LiveClock />
           </div>
