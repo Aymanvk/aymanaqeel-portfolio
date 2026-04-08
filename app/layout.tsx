@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Space_Grotesk, Inter, Space_Mono, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
+import { Suspense } from 'react';
 import Navbar from '@/components/ui/Navbar';
 import CursorGlow from '@/components/ui/CursorGlow';
 import LenisProvider from '@/components/ui/LenisProvider';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import AOSInit from '@/components/ui/AOSInit';
+import ComingSoon from '@/components/ui/ComingSoon';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
@@ -22,9 +24,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isComingSoon = process.env.NEXT_PUBLIC_COMING_SOON === 'true';
+
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${cormorant.variable}`}>
-      <body>
+      <body className="antialiased">
+        {isComingSoon && (
+          <Suspense fallback={null}>
+            <ComingSoon />
+          </Suspense>
+        )}
         <LenisProvider>
           <AOSInit />
           <CursorGlow />
