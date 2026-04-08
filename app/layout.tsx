@@ -8,6 +8,7 @@ import LenisProvider from '@/components/ui/LenisProvider';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import AOSInit from '@/components/ui/AOSInit';
 import ComingSoon from '@/components/ui/ComingSoon';
+import ComingSoonFallback from '@/components/ui/ComingSoonFallback';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
@@ -30,7 +31,7 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${spaceMono.variable} ${cormorant.variable}`}>
       <body className="antialiased">
         {isComingSoon && (
-          <Suspense fallback={null}>
+          <Suspense fallback={<ComingSoonFallback />}>
             <ComingSoon />
           </Suspense>
         )}

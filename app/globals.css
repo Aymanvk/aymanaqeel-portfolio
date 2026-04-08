@@ -5,7 +5,7 @@
   src: url('/fonts/Tanker-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @tailwind base;
@@ -105,4 +105,20 @@ body {
   font-size: 0.8125rem;
   color: var(--text-muted);
   letter-spacing: 0.02em;
+}
+
+/* ── Cinematic Reveal animation ── */
+@keyframes reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-reveal {
+  animation: reveal 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }

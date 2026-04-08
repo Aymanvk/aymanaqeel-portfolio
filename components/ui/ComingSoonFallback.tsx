@@ -1,28 +1,13 @@
-'use client';
-
 import React from 'react';
-import { useSearchParams } from 'next/navigation';
 
-export default function ComingSoon() {
-  const searchParams = useSearchParams();
-  const previewParam = searchParams.get('preview');
-  const previewSecret = process.env.NEXT_PUBLIC_PREVIEW_SECRET || 'true';
-
-  // If the URL contains ?preview=true (or the secret value), bypass the overlay
-  if (previewParam === previewSecret) {
-    return null;
-  }
-
+export default function ComingSoonFallback() {
   return (
     <div className="fixed inset-0 z-[9999] w-screen h-screen overflow-hidden">
-      {/* Backdrop Blur Layer */}
-      <div 
-        className="absolute inset-0 z-0 backdrop-blur-[12px]" 
-        style={{ backgroundColor: 'rgba(27, 46, 31, 0.4)' }}
-      />
+      {/* Static Background Layer (Matches ComingSoon.tsx) */}
+      <div className="absolute inset-0 bg-[#1B2E1F]" />
       
-      {/* Main Content Overlay */}
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#1B2E1F]">
+      {/* Content Container (Matches ComingSoon.tsx) */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
         {/* Mesh Gradient Overlay */}
         <div className="mesh-overlay opacity-60 pointer-events-none" />
         
