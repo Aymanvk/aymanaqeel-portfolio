@@ -3,9 +3,9 @@ import { sendEmail } from '@/lib/resend';
 
 export async function POST(req: Request) {
   try {
-    const { email, message } = await req.json();
+    const { name, email, subject, message } = await req.json();
 
-    if (!email || !message) {
+    if (!name || !email || !subject || !message) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
@@ -15,30 +15,32 @@ export async function POST(req: Request) {
     }
 
     const compiledMessage = `
-    New Message Received Form Submission:
+    New Cinematic Narrative Form Submission:
     
+    Name: ${name}
     Email: ${email}
+    Subject: ${subject}
     Message:
     ${message}
     
     ---
-    Reply directly to this email chain to communicate with the prospect.
+    Reply directly to this email chain to communicate with ${name}.
     `;
 
     const result = await sendEmail(
-      recipient || 'fallback@example.com',
-      `[Portfolio] Inquiry from ${email}`,
+      recipient || 'aymanaqeelvk@gmail.com',
+      `[Narrative] ${subject} — from ${name}`,
       compiledMessage,
       email
     );
 
     if (!result.success) {
-      return NextResponse.json({ error: 'Failed to route transaction' }, { status: 500 });
+      return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
 
   } catch (error) {
-    return NextResponse.json({ error: 'Internal configuration error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
