@@ -49,15 +49,62 @@ export default function Hero() {
   const heroRef   = useRef<HTMLElement>(null);
   const topRef    = useRef<HTMLDivElement>(null);
   const clockRef  = useRef<HTMLDivElement>(null);
-  const line1Ref  = useRef<HTMLDivElement>(null);
-  const line2Ref  = useRef<HTMLDivElement>(null);
-  const subRef    = useRef<HTMLParagraphElement>(null);
+  const centerRef = useRef<HTMLDivElement>(null);
   const pillRef   = useRef<HTMLDivElement>(null);
+
+  const [text, setText] = useState('');
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const words = [
+    'web apps.',
+    'REST APIs.',
+    'full-stack products.',
+    'clean interfaces.',
+    'things that ship.'
+  ];
+
+  /* Typewriter Effect */
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (isPaused) {
+      timeout = setTimeout(() => {
+        setIsPaused(false);
+        setIsDeleting(true);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+
+    const currentWord = words[wordIndex];
+
+    if (isDeleting) {
+      if (text === '') {
+        setIsDeleting(false);
+        setWordIndex((prev) => (prev + 1) % words.length);
+      } else {
+        timeout = setTimeout(() => {
+          setText(currentWord.substring(0, text.length - 1));
+        }, 30);
+      }
+    } else {
+      if (text === currentWord) {
+        setIsPaused(true);
+      } else {
+        timeout = setTimeout(() => {
+          setText(currentWord.substring(0, text.length + 1));
+        }, 60);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [text, isDeleting, isPaused, wordIndex]);
 
   /* GSAP entrance */
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.set([topRef.current, clockRef.current, line1Ref.current, line2Ref.current, subRef.current, pillRef.current], {
+      gsap.set([topRef.current, clockRef.current, centerRef.current, pillRef.current], {
         opacity: 0,
       });
 
@@ -67,15 +114,9 @@ export default function Hero() {
         opacity: 1, y: 0, duration: 0.9, stagger: 0.06,
         from: { y: -18 },
       })
-      .to(line1Ref.current, {
+      .to(centerRef.current, {
         opacity: 1, y: 0, duration: 1, from: { y: 52 },
       }, '-=0.5')
-      .to(line2Ref.current, {
-        opacity: 1, y: 0, duration: 1, from: { y: 52 },
-      }, '-=0.75')
-      .to(subRef.current, {
-        opacity: 1, y: 0, duration: 0.8, from: { y: 18 },
-      }, '-=0.55')
       .to(pillRef.current, {
         opacity: 1, y: 0, duration: 0.7, from: { y: 20 },
       }, '-=0.4');
@@ -144,54 +185,41 @@ export default function Hero() {
       </div>
 
       {/* ── Center headline ── */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center">
-
-        <div className="flex flex-col items-center mb-8 md:mb-10 overflow-hidden">
-          <div
-            ref={line1Ref}
-            className="text-[#F5F0E6] leading-[0.95] tracking-tight"
-            style={{
-              fontFamily: "'Cabinet Grotesk', sans-serif",
-              fontWeight: 500,
-              fontSize: 'clamp(2.8rem, 8.5vw, 7.5rem)',
-              opacity: 0,
-              transform: 'translateY(52px)',
-            }}
-          >
-            Software is going
-          </div>
-          <div
-            ref={line2Ref}
-            className="text-[#C8956C] leading-[0.95] tracking-tight"
-            style={{
-              fontFamily: "'Cabinet Grotesk', sans-serif",
-              fontWeight: 500,
-              fontSize: 'clamp(2.8rem, 8.5vw, 7.5rem)',
-              opacity: 0,
-              transform: 'translateY(52px)',
-            }}
-          >
-            nowhere, ever.
-          </div>
-        </div>
-
-        <p
-          ref={subRef}
-          className="max-w-[38rem] text-[#F5F0E6]/38 leading-[1.9]"
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+        <div
+          ref={centerRef}
+          className="flex flex-row items-center justify-center flex-wrap"
           style={{
-            fontFamily: 'Georgia, serif',
-            fontStyle: 'italic',
-            fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)',
+            fontFamily: "'Cabinet Grotesk', sans-serif",
+            fontWeight: 500,
+            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
             opacity: 0,
-            transform: 'translateY(18px)',
+            transform: 'translateY(52px)',
+            lineHeight: 1.1,
           }}
         >
-          Building experiences at the intersection of clean code and bold design.
-          Based in Malappuram, Kerala.
-        </p>
+          <span className="text-[#F5F0E6] whitespace-pre">I build </span>
+          <span className="text-[#C8956C] whitespace-pre">
+            {text}
+            <span
+              className="text-[#C8956C] opacity-100 font-light"
+              style={{
+                animation: 'pulse-cursor 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              }}
+            >
+              |
+            </span>
+          </span>
+          <style>{`
+            @keyframes pulse-cursor {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0; }
+            }
+          `}</style>
+        </div>
       </div>
 
-      {/* ── Bottom floating pill nav ── */}
+      {/* ── Bottom floating navbar ── */}
       <div
         ref={pillRef}
         className="relative z-10 flex justify-center pb-10 md:pb-12"
@@ -200,9 +228,9 @@ export default function Hero() {
         <nav
           className="flex items-center gap-1 px-3 py-2"
           style={{
-            backgroundColor: 'rgba(245,240,230,0.06)',
-            border: '0.5px solid rgba(245,240,230,0.12)',
-            borderRadius: '999px',
+            backgroundColor: 'rgba(245,240,230,0.1)',
+            border: '1px solid rgba(245,240,230,0.28)',
+            borderRadius: '8px',
             backdropFilter: 'blur(14px)',
             WebkitBackdropFilter: 'blur(14px)',
           }}
@@ -213,7 +241,7 @@ export default function Hero() {
           </div>
 
           {/* Divider */}
-          <div className="w-px h-5 bg-[#F5F0E6]/12 mx-1" />
+          <div className="w-px h-5 mx-1" style={{ backgroundColor: 'rgba(245,240,230,0.2)' }} />
 
           {/* Nav links */}
           {[
@@ -224,25 +252,50 @@ export default function Hero() {
             <Link
               key={link.label}
               href={link.href}
-              className="px-3 py-1.5 rounded-full text-[#F5F0E6]/55 hover:text-[#F5F0E6] transition-colors"
-              style={{ fontFamily: 'var(--font-body), sans-serif', fontSize: '0.82rem' }}
+              className="px-3 py-1.5 uppercase transition-opacity hover:opacity-80"
+              style={{
+                color: '#F5F0E6',
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: '0.82rem',
+                letterSpacing: '0.12em',
+                textDecoration: 'underline',
+                textUnderlineOffset: '3px',
+                textDecorationColor: 'rgba(245,240,230,0.3)',
+              }}
             >
               {link.label}
             </Link>
           ))}
 
-          {/* Divider */}
-          <div className="w-px h-5 bg-[#F5F0E6]/12 mx-1" />
+          {/* CV Link */}
+          <a
+            href="/Ayman_Aqeel_CV.pdf"
+            download
+            className="px-3 py-1.5 uppercase transition-opacity hover:opacity-80"
+            style={{
+              color: '#C8956C',
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: '0.82rem',
+              letterSpacing: '0.1em',
+              textDecoration: 'none',
+            }}
+          >
+            CV
+          </a>
 
-          {/* Blog amber pill */}
+          {/* Divider */}
+          <div className="w-px h-5 mx-1" style={{ backgroundColor: 'rgba(245,240,230,0.2)' }} />
+
+          {/* Blog amber badge */}
           <Link
             href="/blog"
-            className="px-4 py-1.5 rounded-full font-medium transition-opacity hover:opacity-85"
+            className="px-4 py-1.5 font-medium transition-opacity hover:opacity-85"
             style={{
               backgroundColor: '#C8956C',
               color: '#1B2E1F',
               fontFamily: 'var(--font-body), sans-serif',
               fontSize: '0.82rem',
+              borderRadius: '4px',
             }}
           >
             Blog
