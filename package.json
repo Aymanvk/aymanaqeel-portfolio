@@ -15,6 +15,7 @@
     "@supabase/ssr": "^0.x",
     "@supabase/supabase-js": "^2.x",
     "@uiw/react-md-editor": "^4.x",
+    "@vercel/analytics": "^2.0.1",
     "aos": "*",
     "bad-words": "^3.x",
     "clsx": "^2.x",
