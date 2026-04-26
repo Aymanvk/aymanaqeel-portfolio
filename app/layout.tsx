@@ -5,7 +5,6 @@ import { Suspense } from 'react';
 import Navbar from '@/components/ui/Navbar';
 import CursorGlow from '@/components/ui/CursorGlow';
 import LenisProvider from '@/components/ui/LenisProvider';
-import ScrollProgress from '@/components/ui/ScrollProgress';
 import AOSInit from '@/components/ui/AOSInit';
 import ComingSoon from '@/components/ui/ComingSoon';
 import ComingSoonFallback from '@/components/ui/ComingSoonFallback';
@@ -38,7 +37,6 @@ export default function RootLayout({
         <LenisProvider>
           <AOSInit />
           <CursorGlow />
-          <ScrollProgress />
           <Navbar />
           {children}
         </LenisProvider>

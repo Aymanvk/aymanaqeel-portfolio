@@ -104,22 +104,22 @@ export default function Hero() {
   /* GSAP entrance */
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.set([topRef.current, clockRef.current, centerRef.current, pillRef.current], {
-        opacity: 0,
-      });
-
       const tl = gsap.timeline({ delay: 0.1, defaults: { ease: 'power3.out' } });
 
-      tl.to([topRef.current, clockRef.current], {
-        opacity: 1, y: 0, duration: 0.9, stagger: 0.06,
-        from: { y: -18 },
-      })
-      .to(centerRef.current, {
-        opacity: 1, y: 0, duration: 1, from: { y: 52 },
-      }, '-=0.5')
-      .to(pillRef.current, {
-        opacity: 1, y: 0, duration: 0.7, from: { y: 20 },
-      }, '-=0.4');
+      tl.fromTo([topRef.current, clockRef.current],
+        { opacity: 0, y: -18 },
+        { opacity: 1, y: 0, duration: 0.9, stagger: 0.06 }
+      )
+      .fromTo(centerRef.current,
+        { opacity: 0, y: 52 },
+        { opacity: 1, y: 0, duration: 1 },
+        '-=0.5'
+      )
+      .fromTo(pillRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.7 },
+        '-=0.4'
+      );
 
     }, heroRef);
     return () => ctx.revert();
@@ -146,12 +146,28 @@ export default function Hero() {
       />
 
       {/* ── Top bar ── */}
-      <div className="relative z-10 flex items-center justify-between px-8 md:px-12 pt-8 md:pt-10">
+      <div className="relative w-full px-8 md:px-12 pt-8 md:pt-10 flex justify-between items-start z-20">
 
-        {/* Logo + Name block */}
-        <div ref={topRef} className="flex items-center gap-3.5" style={{ opacity: 0, transform: 'translateY(-18px)' }}>
+        {/* Live clock (Far Left) */}
+        <div ref={clockRef} className="text-left flex flex-col gap-1.5 flex-1">
+          <div
+            className="text-[#F5F0E6]/35 uppercase tracking-widest leading-none"
+            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.7rem' }}
+          >
+            Malappuram, Kerala
+          </div>
+          <div
+            className="text-[#C8956C] tabular-nums leading-none"
+            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.9rem' }}
+          >
+            <LiveClock />
+          </div>
+        </div>
+
+        {/* Logo + Name block (Center) */}
+        <div ref={topRef} className="flex items-center gap-3.5 flex-1 justify-center z-50 pointer-events-auto">
           <AALogo size={42} />
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 text-left">
             <span
               className="text-[#F5F0E6] uppercase leading-none tracking-[0.12em]"
               style={{ fontFamily: 'Tanker, sans-serif', fontSize: 'clamp(1rem, 1.6vw, 1.35rem)' }}
@@ -166,22 +182,9 @@ export default function Hero() {
             </span>
           </div>
         </div>
-
-        {/* Live clock */}
-        <div ref={clockRef} className="text-right flex flex-col gap-1.5" style={{ opacity: 0, transform: 'translateY(-18px)' }}>
-          <div
-            className="text-[#F5F0E6]/35 uppercase tracking-widest leading-none"
-            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.7rem' }}
-          >
-            Malappuram, Kerala
-          </div>
-          <div
-            className="text-[#C8956C] tabular-nums leading-none"
-            style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.9rem' }}
-          >
-            <LiveClock />
-          </div>
-        </div>
+        
+        {/* Empty flex-1 for right centering balance */}
+        <div className="flex-1 hidden md:block"></div>
       </div>
 
       {/* ── Center headline ── */}
@@ -193,8 +196,6 @@ export default function Hero() {
             fontFamily: "'Cabinet Grotesk', sans-serif",
             fontWeight: 500,
             fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            opacity: 0,
-            transform: 'translateY(52px)',
             lineHeight: 1.1,
           }}
         >
@@ -223,7 +224,6 @@ export default function Hero() {
       <div
         ref={pillRef}
         className="relative z-10 flex justify-center pb-10 md:pb-12"
-        style={{ opacity: 0, transform: 'translateY(20px)' }}
       >
         <nav
           className="flex items-center gap-1 px-3 py-2"
