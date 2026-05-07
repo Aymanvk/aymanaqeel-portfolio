@@ -8,6 +8,7 @@ import LenisProvider from '@/components/ui/LenisProvider';
 import AOSInit from '@/components/ui/AOSInit';
 import ComingSoon from '@/components/ui/ComingSoon';
 import ComingSoonFallback from '@/components/ui/ComingSoonFallback';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-display' });
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
@@ -40,6 +41,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </LenisProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
